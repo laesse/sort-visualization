@@ -1,6 +1,4 @@
-import { sleep } from "./App";
-
-export const bubble = async (array: number[], setArray: (arr: number[]) => void) => {
+export const bubble = async (array: number[], setArray: (arr: number[]) => Promise<void>) => {
     for (let i = 0; i < array.length - 1; i++) {
         for (let j = 0; j < array.length - i - 1; j++) {
             if (array[j] > array[j + 1]) {
@@ -8,13 +6,12 @@ export const bubble = async (array: number[], setArray: (arr: number[]) => void)
                 array[j] = array[j + 1];
                 array[j + 1] = temp;
                 console.log(array)
-                setArray(array);
-                await sleep(5);
+                await setArray(array);
             }
         }
     }
 }
-export const cocktailSort = async (a: number[], setArray: (arr: number[]) => void) => {
+export const cocktailSort = async (a: number[], setArray: (arr: number[]) => Promise<void>) => {
     let swapped = true;
     let start = 0;
     let end = a.length;
@@ -33,8 +30,7 @@ export const cocktailSort = async (a: number[], setArray: (arr: number[]) => voi
                 a[i] = a[i + 1];
                 a[i + 1] = temp;
                 swapped = true;
-                setArray(a);
-                await sleep(5);
+                await setArray(a);
             }
         }
 
@@ -58,8 +54,7 @@ export const cocktailSort = async (a: number[], setArray: (arr: number[]) => voi
                 a[i] = a[i + 1];
                 a[i + 1] = temp;
                 swapped = true;
-                setArray(a);
-                await sleep(5);
+                await setArray(a);
             }
         }
 

@@ -1,6 +1,4 @@
-import { sleep } from "./App";
-
-const partition = async (arr: number[], low: number, high: number, setArr: (arr: number[]) => void) => {
+const partition = async (arr: number[], low: number, high: number, setArr: (arr: number[]) => Promise<void>) => {
     let pivot = arr[high];
     let i = (low - 1); // index of smaller element 
     for (let j = low; j < high; j++) {
@@ -12,8 +10,7 @@ const partition = async (arr: number[], low: number, high: number, setArr: (arr:
             let temp = arr[i];
             arr[i] = arr[j];
             arr[j] = temp;
-            setArr(arr)
-            await sleep(5)
+            await setArr(arr)
         }
     }
 
@@ -22,8 +19,7 @@ const partition = async (arr: number[], low: number, high: number, setArr: (arr:
     arr[i + 1] = arr[high];
     arr[high] = temp;
 
-    setArr(arr)
-    await sleep(5)
+    await setArr(arr)
 
     return i + 1;
 }
@@ -33,7 +29,7 @@ const partition = async (arr: number[], low: number, high: number, setArr: (arr:
   arr[] --> Array to be sorted, 
   low  --> Starting index, 
   high  --> Ending index */
-export const quick = async (arr: number[], low: number, high: number, setArr: (arr: number[]) => void) => {
+export const quick = async (arr: number[], low: number, high: number, setArr: (arr: number[]) => Promise<void>) => {
     if (low < high) {
         /* pi is partitioning index, arr[pi] is  
           now at right place */

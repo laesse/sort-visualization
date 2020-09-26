@@ -19,61 +19,57 @@ const generateInitialArray = (size: number, min: number, max: number) => {
   }
   return out;
 }
-interface IBoxProps {
-  size: number
-}
-type TimerIno = {
-  date: Date
-}
-interface IAppState {
-  array: number[]
-  text: string[]
-}
 
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 
 
+interface IBoxProps {
+  size: number
+}
+interface IAppState {
+  array: number[]
+  text: string[]
+  delay: number
+}
 
 const Box = ({ size }: IBoxProps) => {
-  return <div className='box' style={{ marginTop: size/4294967 }}></div>
+  return <div className='box' style={{ marginTop: size / 4294967 }}></div>
 }
-let time: Date;
-const startTime = () => {
-  time = new Date();
-}
-const endTime = ():number => new Date().getTime() - time.getTime() 
 
 class App extends React.Component<{}, IAppState> {
   constructor(props: any) {
     super(props);
-    this.state =  { array: [], text: []}
+    this.state = { array: [], text: [], delay: 1 }
   }
   initArray = () => {
-    this.setState({array: generateInitialArray(1000, 0, Math.pow(256,4))})
+    this.setState({ array: generateInitialArray(5000, 0, Math.pow(256, 4)) })
   }
   start = async (array: number[]) => {
-    const setArray = (array: number[]) => this.setState({ array });
+    const setArray = async (array: number[]) => {
+      this.setState({ array });
+      await sleep(this.state.delay)
+    };
 
-    await this.doSort(()=> bubble([...array], setArray), "bubble")
-    await this.doSort(()=> cocktailSort([...array], setArray), "cocktail")
-    await this.doSort(()=> mergeSort([...array], 0, array.length-1, setArray), "merge")
-    await this.doSort(()=> quick([...array], 0, array.length-1, setArray), "quick")
-    await this.doSort(()=> RadixSort256([...array], array.length, setArray), "radix")
+    await this.doSort(() => bubble([...array].slice(0, 100), setArray), "bubble", 0)
+    await this.doSort(() => cocktailSort([...array].slice(0, 100), setArray), "cocktail", 1)
+    await this.doSort(() => mergeSort([...array].slice(0, 500), 0, [...array].slice(0, 500).length - 1, setArray), "merge", 2)
+    await this.doSort(() => quick([...array].slice(0, 1000), 0, [...array].slice(0, 1000).length - 1, setArray), "quick", 1)
+    await this.doSort(() => RadixSort256([...array].slice(0, 5000), [...array].slice(0, 5000).length, setArray), "radix", 0)
   }
 
-  doSort = async (sortFunction: () => Promise<void>, sortName: string) => {
+  doSort = async (sortFunction: () => Promise<void>, sortName: string, delay: number) => {
     const time: Date = new Date();
-    this.appendText(sortName, false)
+    this.appendText(sortName, false, delay)
     await sortFunction();
-    this.appendText(`${sortName}: ${new Date().getTime() - time.getTime() }ms`, true);
+    this.appendText(`${sortName}: ${new Date().getTime() - time.getTime()}ms`, true);
   }
 
-  appendText = (textToAppend: string, shouldShift: boolean) => {
+  appendText = (textToAppend: string, shouldShift: boolean, delay: number = 1) => {
 
     let arr = this.state.text
     shouldShift && arr.shift()
-    this.setState({text:  [textToAppend,...arr]})
+    this.setState({ text: [textToAppend, ...arr], delay })
   }
   render = () => {
     // console.log(this.state.array)

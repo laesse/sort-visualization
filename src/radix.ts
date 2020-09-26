@@ -1,7 +1,5 @@
-import { sleep } from "./App";
 
-
-export const RadixSort256 = async (arr: number[], n: number, setArr:(arr: number[])=>void) =>
+export const RadixSort256 = async (arr: number[], n: number, setArr:(arr: number[])=> Promise<void>) =>
 {
  if (n <= 1) return; // Added base case
 
@@ -32,8 +30,7 @@ export const RadixSort256 = async (arr: number[], n: number, setArr:(arr: number
 
    // Subtract from the count and store the value
    output[--count[idx]] = arr[i];
-   setArr(output)
-   await sleep(5)
+   await setArr(output)
   }
 
   // Copy the output array to input[], so that input[] 

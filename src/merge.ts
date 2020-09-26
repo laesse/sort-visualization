@@ -1,6 +1,4 @@
-import { sleep } from "./App";
-
-const merge = async (arr: number[], l: number, m: number, r: number, setArr:(arr: number[])=>void) => {
+const merge = async (arr: number[], l: number, m: number, r: number, setArr:(arr: number[])=>Promise<void>) => {
     // Find sizes of two subarrays to be merged 
     let n1 = m - l + 1;
     let n2 = r - m;
@@ -26,13 +24,11 @@ const merge = async (arr: number[], l: number, m: number, r: number, setArr:(arr
         if (L[i] <= R[j]) {
             arr[k] = L[i];
             i++;
-            setArr(arr)
-            await sleep(5)
+            await setArr(arr)
         }else {
             arr[k] = R[j];
             j++;
-            setArr(arr)
-            await sleep(5)
+            await setArr(arr)
         }
         k++;
     }
@@ -42,8 +38,7 @@ const merge = async (arr: number[], l: number, m: number, r: number, setArr:(arr
         arr[k] = L[i];
         i++;
         k++;
-        setArr(arr)
-        await sleep(5)
+        await setArr(arr)
     }
 
     /* Copy remaining elements of R[] if any */
@@ -51,14 +46,13 @@ const merge = async (arr: number[], l: number, m: number, r: number, setArr:(arr
         arr[k] = R[j];
         j++;
         k++;
-        setArr(arr)
-        await sleep(5)
+        await setArr(arr)
     }
 }
 
 // Main function that sorts arr[l..r] using 
 // merge() 
-export const mergeSort = async (arr: number[], l: number, r: number, setArr:(arr: number[])=>void) => {
+export const mergeSort = async (arr: number[], l: number, r: number, setArr:(arr: number[])=>Promise<void>) => {
     if (l < r) {
         // Find the middle point 
         let m = Math.floor((l + r) / 2);
