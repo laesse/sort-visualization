@@ -1,4 +1,4 @@
-const merge = async (arr: number[], l: number, m: number, r: number, setArr:(arr: number[])=>Promise<void>) => {
+const merge = async (arr: number[], l: number, m: number, r: number, out: number[][]) => {
     // Find sizes of two subarrays to be merged 
     let n1 = m - l + 1;
     let n2 = r - m;
@@ -24,11 +24,11 @@ const merge = async (arr: number[], l: number, m: number, r: number, setArr:(arr
         if (L[i] <= R[j]) {
             arr[k] = L[i];
             i++;
-            await setArr(arr)
+            out.push([...arr])
         }else {
             arr[k] = R[j];
             j++;
-            await setArr(arr)
+            out.push([...arr])
         }
         k++;
     }
@@ -38,7 +38,7 @@ const merge = async (arr: number[], l: number, m: number, r: number, setArr:(arr
         arr[k] = L[i];
         i++;
         k++;
-        await setArr(arr)
+        out.push([...arr])
     }
 
     /* Copy remaining elements of R[] if any */
@@ -46,22 +46,29 @@ const merge = async (arr: number[], l: number, m: number, r: number, setArr:(arr
         arr[k] = R[j];
         j++;
         k++;
-        await setArr(arr)
+        out.push([...arr])
     }
 }
 
 // Main function that sorts arr[l..r] using 
 // merge() 
-export const mergeSort = async (arr: number[], l: number, r: number, setArr:(arr: number[])=>Promise<void>) => {
+const mergeSortR = async (arr: number[], l: number, r: number, out: number[][]) => {
     if (l < r) {
         // Find the middle point 
         let m = Math.floor((l + r) / 2);
 
         // Sort first and second halves 
-        await mergeSort(arr, l, m, setArr);
-        await mergeSort(arr, m + 1, r, setArr);
+        await mergeSortR(arr, l, m, out);
+        await mergeSortR(arr, m + 1, r, out);
 
         // Merge the sorted halves 
-        await merge(arr, l, m, r, setArr);
+        await merge(arr, l, m, r, out);
     }
+    return out;
+} 
+
+export const mergeSort = async (arr: number[], l: number, r: number) => {
+    let out: number[][] = []
+    await mergeSortR(arr, l, r, out);
+    return out;
 } 

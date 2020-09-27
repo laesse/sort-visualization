@@ -1,14 +1,21 @@
 .app {
   background-color: black;
   height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+.display {
+  color: white;
+  
 }
 
 .box {
   background-color: white;
   flex-basis: 5px; 
-  flex-grow: 3;
-  flex-shrink: 2;
-  border: 1px solid black;
+  flex-grow: 10;
+  flex-shrink: 10;
+  /* border: 1px solid black; */
 }
 
 .container {
@@ -16,7 +23,7 @@
   flex-direction: row;
   flex-wrap: nowrap; 
   justify-content: stretch;
-  /* height:1500px; */
+  /* height:1200px; */
 }
 .control-bar {
   display: flex;
